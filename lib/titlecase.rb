@@ -9,23 +9,20 @@ titlecase.rb
 
 == Description
 
-A module that adds titlecase functionality to String
+A module that adds titlecase functionality to String with stopwords
 
 =end
 
 require 'titlecase/version'
 
 module Titlecase
-  VERSION = '0.0.1'
 
   # Default stop words to be used if none specified
   DEFAULT_STOP_WORDS = %w[a an and or of the from by]
 
-
   # *stopwords*:: an array consisting of words to *not* capitalize in the string.
   # If nil or omitted, a set of default stop words will be used.
-  def titlecase!(stopwords=nil)
-    stopwords = DEFAULT_STOP_WORDS if stopwords.nil?
+  def titlecase!(stopwords=DEFAULT_STOP_WORDS)
     stopwords.map!(&:downcase)
     self.gsub!(/\w+/) do |w|
       stopwords.include?(w.downcase) ? w.downcase : w.capitalize
@@ -33,10 +30,11 @@ module Titlecase
   end
 
   # *stopwords*:: an array consisting of words to *not* capitalize in the string
-  def titlecase(stopwords=nil)
+  def titlecase(stopwords=DEFAULT_STOP_WORDS)
     dup.titlecase!(stopwords)
   end
   
 end
 
+# Include these methods in String class
 String.send(:include,Titlecase)
